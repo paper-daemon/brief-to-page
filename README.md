@@ -17,3 +17,6 @@ python brief_to_page.py brief.json --output index.html
 試作品、ポートフォリオ、告知ページ、小規模サービスLPの叩き台向け。
 
 Python 3.10+ / 外部ライブラリ不要 / MIT License。
+- BOOTH 0円DL: https://amase-memo.booth.pm/items/8778713
+- 作者サイト: https://paper-daemon.github.io/
+
