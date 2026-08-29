@@ -1,0 +1,30 @@
+{
+  "brand": "amase sample",
+  "title": "小さいLPを、ちゃんと1枚に。",
+  "hero": "短い要件からレスポンシブな静的LPを生成します。",
+  "tagline": "BRIEF → PAGE",
+  "sections": [
+    {
+      "eyebrow": "01",
+      "title": "できること",
+      "items": [
+        {
+          "title": "responsive",
+          "text": "スマホでも崩れにくい"
+        },
+        {
+          "title": "SEO basics",
+          "text": "title / description / OGP"
+        },
+        {
+          "title": "single file",
+          "text": "配布しやすいHTML 1枚"
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "label": "相談する",
+    "href": "#contact"
+  }
+}
