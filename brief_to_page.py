@@ -28,6 +28,12 @@ def load(path):
             raise ValueError(f'sections[{index}].items must be a list of objects')
     return data
 
+def validate_output_path(brief, output):
+    brief_path=Path(brief).resolve()
+    output_path=Path(output).resolve(strict=False)
+    if brief_path == output_path:
+        raise ValueError(f'output must not overwrite the input brief: {brief_path}')
+
 def esc(v): return html.escape(str(v or ''))
 
 COLOR = re.compile(r'^(?:#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}|#[0-9a-fA-F]{8}|[A-Za-z]{3,24})$')
@@ -65,7 +71,12 @@ def render(d):
 def main():
     ap=argparse.ArgumentParser(description='Turn a small JSON brief into a responsive single-file landing page.')
     ap.add_argument('brief'); ap.add_argument('--output',default='index.html')
-    a=ap.parse_args(); data=load(a.brief); out=Path(a.output)
+    a=ap.parse_args()
+    try:
+        validate_output_path(a.brief,a.output)
+    except ValueError as e:
+        ap.error(str(e))
+    data=load(a.brief); out=Path(a.output)
     out.write_text(render(data),encoding='utf-8')
     print(f'generated={out} sections={len(data["sections"])} brand={data["brand"]}')
 
