@@ -23,7 +23,7 @@ def load(path):
     for index, section in enumerate(data['sections']):
         if not isinstance(section, dict):
             raise ValueError(f'sections[{index}] must be an object')
-        items=section.get('items') or []
+        items=section.get('items', [])
         if not isinstance(items, list) or any(not isinstance(item, dict) for item in items):
             raise ValueError(f'sections[{index}].items must be a list of objects')
     return data
