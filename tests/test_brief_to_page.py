@@ -26,4 +26,19 @@ class T(unittest.TestCase):
         page=render(safe)
         self.assertIn('href="https://example.com/?a=1&amp;b=2"',page)
 
+    def test_rejects_invalid_container_shapes(self):
+        cases = [
+            (['not','object'], 'brief root'),
+            ({'brand':'Test','title':'Hello','hero':'World','sections':'oops'}, 'sections'),
+            ({'brand':'Test','title':'Hello','hero':'World','palette':['red']}, 'palette'),
+            ({'brand':'Test','title':'Hello','hero':'World','cta':['go']}, 'cta'),
+            ({'brand':'Test','title':'Hello','hero':'World','sections':[{'title':'A','items':'oops'}]}, 'items'),
+        ]
+        for data, message in cases:
+            p=Path(tempfile.mktemp(suffix='.json'))
+            p.write_text(json.dumps(data),encoding='utf-8')
+            with self.subTest(message=message):
+                with self.assertRaisesRegex(ValueError, message):
+                    load(p)
+
 if __name__=='__main__': unittest.main()
