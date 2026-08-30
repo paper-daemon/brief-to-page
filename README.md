@@ -18,6 +18,10 @@ python brief_to_page.py brief.json --output index.html
 
 - [JSON briefのshape境界とエラー例](docs/brief-shape-boundaries.md)
 
+## Output safety boundary
+
+`--output` は入力briefとは別の実体pathである必要があります。入力JSONと同じpathを指定した場合は、HTML生成前にエラー終了し、元briefを上書きしません。
+
 Python 3.10+ / 外部ライブラリ不要 / MIT License。
 - BOOTH 0円DL: https://amase-memo.booth.pm/items/8778713
 - 作者サイト: https://paper-daemon.github.io/
