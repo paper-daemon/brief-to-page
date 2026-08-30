@@ -7,11 +7,25 @@ REQUIRED=('brand','title','hero')
 
 def load(path):
     data=json.loads(Path(path).read_text(encoding='utf-8'))
+    if not isinstance(data, dict):
+        raise ValueError('brief root must be a JSON object')
     missing=[k for k in REQUIRED if not data.get(k)]
     if missing: raise ValueError('missing required: '+', '.join(missing))
     data.setdefault('description',data['hero'])
     data.setdefault('sections',[]); data.setdefault('cta',{})
     data.setdefault('palette',{})
+    if not isinstance(data['sections'], list):
+        raise ValueError('sections must be a list')
+    if not isinstance(data['cta'], dict):
+        raise ValueError('cta must be an object')
+    if not isinstance(data['palette'], dict):
+        raise ValueError('palette must be an object')
+    for index, section in enumerate(data['sections']):
+        if not isinstance(section, dict):
+            raise ValueError(f'sections[{index}] must be an object')
+        items=section.get('items') or []
+        if not isinstance(items, list) or any(not isinstance(item, dict) for item in items):
+            raise ValueError(f'sections[{index}].items must be a list of objects')
     return data
 
 def esc(v): return html.escape(str(v or ''))
