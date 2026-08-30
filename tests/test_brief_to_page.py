@@ -1,6 +1,6 @@
 import json, tempfile, unittest
 from pathlib import Path
-from brief_to_page import load, render
+from brief_to_page import load, render, validate_output_path
 
 class T(unittest.TestCase):
     def test_render_sections_and_meta(self):
@@ -52,5 +52,13 @@ class T(unittest.TestCase):
         p=Path(tempfile.mktemp(suffix='.json'))
         p.write_text(json.dumps({**base,'sections':[{'title':'A'}]}),encoding='utf-8')
         self.assertNotIn('items',load(p)['sections'][0],'omitting items remains valid')
+
+    def test_output_cannot_overwrite_input_brief(self):
+        p=Path(tempfile.mktemp(suffix='.json'))
+        p.write_text(json.dumps({'brand':'Test','title':'Hello','hero':'World'}),encoding='utf-8')
+        with self.assertRaisesRegex(ValueError, 'must not overwrite'):
+            validate_output_path(p,p)
+        out=p.parent/'index.html'
+        validate_output_path(p,out)
 
 if __name__=='__main__': unittest.main()
