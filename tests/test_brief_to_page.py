@@ -41,4 +41,16 @@ class T(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, message):
                     load(p)
 
+    def test_rejects_explicit_falsey_nonlist_items(self):
+        base={'brand':'Test','title':'Hello','hero':'World'}
+        for value in ['',0,{},None,False]:
+            p=Path(tempfile.mktemp(suffix='.json'))
+            p.write_text(json.dumps({**base,'sections':[{'title':'A','items':value}]}),encoding='utf-8')
+            with self.subTest(value=value):
+                with self.assertRaisesRegex(ValueError, 'items must be a list of objects'):
+                    load(p)
+        p=Path(tempfile.mktemp(suffix='.json'))
+        p.write_text(json.dumps({**base,'sections':[{'title':'A'}]}),encoding='utf-8')
+        self.assertNotIn('items',load(p)['sections'][0],'omitting items remains valid')
+
 if __name__=='__main__': unittest.main()
